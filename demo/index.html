@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>教师点名签到系统</title>
+<meta name="description" content="教师课堂点名签到系统：添加学生名单、按顺序点名、实时记录签到与缺勤。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230052FF'/%3E%3Cpath d='M9 16.5l4.5 4.5L23 11.5' stroke='%23fff' stroke-width='3.2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="app">
+
+  <header class="hero">
+    <div class="hero__glow hero__glow--a"></div>
+    <div class="hero__glow hero__glow--b"></div>
+    <div class="hero__dots"></div>
+
+    <div class="hero__top">
+      <div class="brand">
+        <span class="brand__dot"></span>
+        <span class="brand__text">CLASSROOM · ROLL CALL</span>
+      </div>
+      <time class="hero__clock" id="clock">--:--:--</time>
+    </div>
+
+    <h1 class="hero__title">教师点名签到系统</h1>
+    <p class="hero__desc">录入学生名单，一键开始点名。学生点击「签到」即完成打卡，未签到者自动计入缺勤记录。</p>
+
+    <div class="stats">
+      <div class="stat">
+        <span class="stat__value" id="statTotal">0</span>
+        <span class="stat__label">学生总数</span>
+      </div>
+      <div class="stat stat--ok">
+        <span class="stat__value" id="statPresent">0</span>
+        <span class="stat__label">已签到</span>
+      </div>
+      <div class="stat stat--warn">
+        <span class="stat__value" id="statAbsent">0</span>
+        <span class="stat__label">缺勤</span>
+      </div>
+      <div class="stat stat--rate">
+        <span class="stat__value" id="statRate">--</span>
+        <span class="stat__label">签到率</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="layout">
+
+    <section class="panel">
+      <div class="panel__head">
+        <h2 class="panel__title">学生名单</h2>
+        <span class="chip" id="rollStatus">未开始</span>
+      </div>
+
+      <form class="add-form" id="addForm" autocomplete="off">
+        <input class="input" id="nameInput" type="text" placeholder="输入学生姓名" maxlength="12" aria-label="学生姓名">
+        <input class="input input--sno" id="snoInput" type="text" placeholder="学号（选填）" maxlength="16" aria-label="学号">
+        <button class="btn btn--primary" type="submit">添加学生</button>
+      </form>
+      <p class="hint" id="formHint">未填写学号时，系统会自动分配一个学号。</p>
+
+      <div class="rollbar">
+        <button class="btn btn--roll" id="rollBtn" type="button">开始点名</button>
+        <button class="btn btn--ghost" id="nextBtn" type="button" disabled>下一位</button>
+        <button class="btn btn--ghost" id="clearStudentsBtn" type="button">清空名单</button>
+      </div>
+
+      <div class="callout" id="callout">等待开始点名…</div>
+
+      <ul class="students" id="studentList"></ul>
+      <p class="empty" id="studentEmpty">还没有学生，先在上方添加吧。</p>
+    </section>
+
+    <section class="panel">
+      <div class="panel__head">
+        <h2 class="panel__title">签到记录</h2>
+        <div class="panel__actions">
+          <button class="mini-btn" id="exportBtn" type="button">导出 CSV</button>
+          <button class="mini-btn" id="clearRecordsBtn" type="button">清空记录</button>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="table" id="presentTable">
+          <thead>
+            <tr>
+              <th>姓名</th>
+              <th>角色</th>
+              <th>学号</th>
+              <th>签到时间</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p class="empty empty--sm" id="presentEmpty">暂无签到记录</p>
+
+      <div class="panel__head panel__head--sub">
+        <h2 class="panel__title">缺勤记录</h2>
+        <span class="chip chip--warn" id="absentCount">0 人</span>
+      </div>
+
+      <div class="table-wrap">
+        <table class="table" id="absentTable">
+          <thead>
+            <tr>
+              <th>姓名</th>
+              <th>角色</th>
+              <th>学号</th>
+              <th>状态</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p class="empty empty--sm" id="absentEmpty">暂无缺勤记录</p>
+    </section>
+
+  </main>
+
+  <footer class="foot">教师点名签到系统 · 所有数据仅保存在本地浏览器</footer>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="js/app.js"></script>
+</body>
+</html>
